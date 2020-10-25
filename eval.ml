@@ -30,13 +30,13 @@ let binary_of_op_imm_shift func7 func3 regd reg1 imm =
 let binary_of_branch func3 reg1 reg2 imm env =
   match (reg1 :> reg_var), (reg2 :> reg_var), (imm :> opr) with
   | `Regname r1, `Regname r2, (`Jmplabel _ as l) ->
-    let imm = find_label_num l env in
+    let imm = (find_label_num l env) in
     (((imm land 4096) lsr 12) lsl 31) lor (((imm land 0b1111100000) lsr 5) lsl 25) lor (r2 lsl 20) lor (r1 lsl 15) lor (func3 lsl 12) lor (((imm land 0b11110) lsr 1) lsl 8) lor (((imm land 2048) lsr 11) lsl 7) lor 0b1100011
   | _ -> raise Invalid_command
 
 let binary_of_lui regd imm =
   match (regd :> reg_var), (imm :> opr) with
-  | `Regname rd, `Imm imm->
+  | `Regname rd, `Imm imm ->
     ((imm lsr 12) lsl 12) lor (rd lsl 7) lor 0b110111
   | _ -> raise Invalid_command
 
@@ -49,14 +49,14 @@ let binary_of_auipc regd imm =
 let binary_of_jal regd imm env =
   match (regd :> reg_var), (imm :> opr) with
   | `Regname rd, (`Jmplabel _ as l) ->
-    let imm = find_label_num l env in
+    let imm = (find_label_num l env) in
     (((imm land 2097151) lsr 20) lsl 31) lor (((imm land 0b11111111110) lsr 1) lsl 21) lor (((imm land 0b100000000000) lsr 11) lsl 20) lor (((imm land 1048575) lsr 12) lsl 12) lor (rd lsl 7) lor 0b110111
   | _ -> raise Invalid_command
 
 let binary_of_jalr reg1 regd imm env =
   match (reg1 :> reg_var), (regd :> reg_var), (imm :> opr) with
   | `Regname r1, `Regname rd, (`Jmplabel _ as l) ->
-    let imm = find_label_num l env in
+    let imm = (find_label_num l env) in
     (imm lsl 20) lor (r1 lsl 15) lor (rd lsl 7) lor 0b1100111
   | _ -> raise Invalid_command
 

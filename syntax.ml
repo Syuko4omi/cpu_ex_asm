@@ -1,5 +1,8 @@
 exception Invalid_command
 
+module M = Map.Make(String)
+type env = int M.t
+
 type imm_x = int
 type imm = [`Imm of imm_x]
 type reg_x = int
@@ -87,3 +90,6 @@ let rec print_expr e =
   | Jalr (x, y, z) -> print_expr_sub_3 "jalr" x y z
 (*  | Lw (x, y, z) -> print_expr_sub_3 "lw" x y z
   | Sw (x, y, z) -> print_expr_sub_3 "sw" x y z *)
+
+let construct_env = List.fold_left (fun env (l, i) -> M.add l i env) M.empty
+let find_env (`JmpLabel l) = M.find l
