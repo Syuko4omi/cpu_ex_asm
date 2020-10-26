@@ -12,32 +12,32 @@ rule main = parse
 | space+ | ','          { main lexbuf } (*skip blank*)
 | '\n'                  { NEWLINE }
 | (text_ele+ as l) ':'  { LABEL l }
-| digit as d            { OPR (`Imm (int_of_string  d))}
-| "zero"                { OPR (`Regname (  0))}
-| "ra"                  { OPR (`Regname (  1))}
-| "sp"                  { OPR (`Regname (  2))}
-| "gp"                  { OPR (`Regname (  3))}
-| "tp"                  { OPR (`Regname (  4))}
-| "t0"                  { OPR (`Regname (  5))}
-| "t1"                  { OPR (`Regname (  6))}
-| "t2"                  { OPR (`Regname (  7))}
-| "s0"                  { OPR (`Regname (  8))}
-| "s1"                  { OPR (`Regname (  9))}
-| 'a' (reg_num as x)    { OPR (`Regname ((int_of_string x)+10) )}
-| "s2"                  { OPR (`Regname (  18))}
-| "s3"                  { OPR (`Regname (  19))}
-| "s4"                  { OPR (`Regname (  20))}
-| "s5"                  { OPR (`Regname (  21))}
-| "s6"                  { OPR (`Regname (  22))}
-| "s7"                  { OPR (`Regname (  23))}
-| "s8"                  { OPR (`Regname (  24))}
-| "s9"                  { OPR (`Regname (  25))}
-| "s10"                 { OPR (`Regname (  26))}
-| "s11"                 { OPR (`Regname (  27))}
-| "t3"                  { OPR (`Regname (  28))}
-| "t4"                  { OPR (`Regname (  29))}
-| "t5"                  { OPR (`Regname (  30))}
-| "t6"                  { OPR (`Regname (  31))}
+| digit as d            { (IMM (int_of_string d))}
+| "zero"                { (REG (0))}
+| "ra"                  { (REG (1))}
+| "sp"                  { (REG (2))}
+| "gp"                  { (REG (3))}
+| "tp"                  { (REG (4))}
+| "t0"                  { (REG (5))}
+| "t1"                  { (REG (6))}
+| "t2"                  { (REG (7))}
+| "s0"                  { (REG (8))}
+| "s1"                  { (REG (9))}
+| 'a' (reg_num as x)    { (REG ((int_of_string x)+10) )}
+| "s2"                  { (REG (18))}
+| "s3"                  { (REG (19))}
+| "s4"                  { (REG (20))}
+| "s5"                  { (REG (21))}
+| "s6"                  { (REG (22))}
+| "s7"                  { (REG (23))}
+| "s8"                  { (REG (24))}
+| "s9"                  { (REG (25))}
+| "s10"                 { (REG (26))}
+| "s11"                 { (REG (27))}
+| "t3"                  { (REG (28))}
+| "t4"                  { (REG (29))}
+| "t5"                  { (REG (30))}
+| "t6"                  { (REG (31))}
 | "add"                 { ADD }
 | "sub"                 { SUB }
 | "sll"                 { SLL }
@@ -66,5 +66,5 @@ rule main = parse
 (*| "lw"                  { LW }
 | "sw"                  { SW }*)
 | eof                   { raise End_of_file }
-| (text_ele+ as l)      { OPR (`Jmplabel l) }
+| (text_ele+ as l)      { (JMPLABEL l) }
 | _                     { failwith ("Unknown Token: " ^ Lexing.lexeme lexbuf)}

@@ -1,15 +1,13 @@
 exception Invalid_command
 
-module M = Map.Make(String)
-type env = int M.t
-
 type imm_x = int
-type imm = [`Imm of imm_x]
+type imm = Imm of imm_x
 type reg_x = int
-type reg = [`Regname of reg_x]
+type reg = Regname of reg_x
+type toplabel_x = string
+type toplabel = Toplabel of toplabel_x
 type jmplabel_x = string
-type jmplabel = [`Jmplabel of jmplabel_x]
-type opr = [`Imm of imm_x | `Regname of reg_x | `Jmplabel of jmplabel_x]
+type jmplabel = Jmplabel of jmplabel_x
 
 type expr =
   | Add of reg * reg * reg
@@ -36,60 +34,8 @@ type expr =
   | Lui of reg * imm
   | Auipc of reg * imm
   | Jal of reg * jmplabel
-  | Jalr of reg * reg * jmplabel
-(*  | Lw of reg * reg * imm
-  | Sw of reg * reg * imm *)
-
-let reg = function #reg as x -> x | _ -> raise Invalid_command
-let imm = function #imm as x -> x | _ -> raise Invalid_command
-let jmplabel = function #jmplabel as x -> x | _ -> raise Invalid_command
+  | Jalr of reg * reg * imm
 
 type command =
   | Top of expr
   | Top_label of jmplabel_x
-
-let print_operand e =
-  match e with
-  | `Imm a -> string_of_int a
-  | `Regname a -> "x" ^ (string_of_int a)
-  | `Jmplabel a -> a
-
-let print_expr_sub_2 op x y =
-  Printf.sprintf "%s %s, %s\n" op (print_operand x) (print_operand y)
-
-let print_expr_sub_3 op x y z =
-  Printf.sprintf "%s %s, %s, %s\n" op (print_operand x) (print_operand y) (print_operand z)
-
-
-let rec print_expr e =
-  match e with
-  | Add (x, y, z) -> print_expr_sub_3 "add" x y z
-  | Sub (x, y, z) -> print_expr_sub_3 "sub" x y z
-  | Sll (x, y, z) -> print_expr_sub_3 "sll" x y z
-  | Slt (x, y, z) -> print_expr_sub_3 "slt" x y z
-  | Xor (x, y, z) -> print_expr_sub_3 "xor" x y z
-  | Srl (x, y, z) -> print_expr_sub_3 "srl" x y z
-  | Sra (x, y, z) -> print_expr_sub_3 "sra" x y z
-  | Or (x, y, z) -> print_expr_sub_3 "or" x y z
-  | And (x, y, z) -> print_expr_sub_3 "and" x y z
-  | Addi (x, y, z) -> print_expr_sub_3 "addi" x y z
-  | Slti (x, y, z) -> print_expr_sub_3 "slti" x y z
-  | Xori (x, y, z) -> print_expr_sub_3 "xori" x y z
-  | Ori (x, y, z) -> print_expr_sub_3 "ori" x y z
-  | Andi (x, y, z) -> print_expr_sub_3 "andi" x y z
-  | Slli (x, y, z) -> print_expr_sub_3 "slli" x y z
-  | Srli (x, y, z) -> print_expr_sub_3 "srli" x y z
-  | Srai (x, y, z) -> print_expr_sub_3 "srai" x y z
-  | Beq (x, y, z) -> print_expr_sub_3 "beq" x y z
-  | Bne (x, y, z) -> print_expr_sub_3 "bne" x y z
-  | Blt (x, y, z) -> print_expr_sub_3 "blt" x y z
-  | Bge (x, y, z) -> print_expr_sub_3 "bge" x y z
-  | Lui (x, y) -> print_expr_sub_2 "lui" x y
-  | Auipc (x, y) -> print_expr_sub_2 "auipc" x y
-  | Jal (x, y) -> print_expr_sub_2 "jal" x y
-  | Jalr (x, y, z) -> print_expr_sub_3 "jalr" x y z
-(*  | Lw (x, y, z) -> print_expr_sub_3 "lw" x y z
-  | Sw (x, y, z) -> print_expr_sub_3 "sw" x y z *)
-
-let construct_env = List.fold_left (fun env (l, i) -> M.add l i env) M.empty
-let find_env (`JmpLabel l) = M.find l
