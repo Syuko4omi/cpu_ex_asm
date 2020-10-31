@@ -1,5 +1,57 @@
-add a0, a0, a1
-add a1, a0, a1
-add a2, a0, a1
-add a3, a0, a1
-add a4, a0, a1
+(*sum 1 to 10*)
+L1:
+addi t0, zero, 0
+addi t1, zero, 0
+addi t2, zero, 10
+L2:
+addi t0, t0, 1
+add t1, t1, t0
+beq t0, t2, L3
+jal ra, L2
+L3:
+add a0, t1, zero
+jalr zero, ra, 0
+
+
+
+(*fibonacchi*)
+main:
+addi t3, zero, 10
+addi t4, zero, 1
+blt t4, t3, L1
+add t4, t3, zero
+jal ra, L3
+L1:
+addi t4, zero, 1
+addi t5, zero, 1
+addi t0, zero, 2
+L2:
+bge t0, t3, L3
+add t6, t4, zero
+add t4, t4, t5
+add t5, t6, zero
+addi t0, t0, 1
+jal ra, L2
+L3:
+add a0, t4, zero
+jalr zero, ra, 0
+
+
+
+(*store/load*)
+addi t0, zero, 5
+sw t0, 10(zero)
+lw t1, 10(zero)
+
+
+
+
+(*float point*)
+addi t0, zero, 5
+fmvwx ft0, t0
+fsqrts ft1, ft0
+addi t1, zero, 4
+fmvwx ft2, t1
+fmuls ft3, ft2, ft1
+fadds ft4, ft1, ft3
+flts t0, ft1, ft4
