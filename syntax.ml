@@ -4,6 +4,8 @@ type imm_x = int
 type imm = Imm of imm_x
 type reg_x = int
 type reg = Regname of reg_x
+type freg_x = int
+type freg = Fregname of freg_x
 type toplabel_x = string
 type toplabel = Toplabel of toplabel_x
 type jmplabel_x = string
@@ -35,6 +37,23 @@ type expr =
   | Auipc of reg * imm
   | Jal of reg * jmplabel
   | Jalr of reg * reg * imm
+  | Lw of reg * imm * reg
+  | Sw of reg * imm * reg
+  | Mul of reg * reg * reg
+  | Div of reg * reg * reg
+  | Rem of reg * reg * reg
+  | Flw of freg * imm * freg
+  | Fsw of freg * imm * freg
+  | Fadds of freg * freg * freg
+  | Fsubs of freg * freg * freg
+  | Fmuls of freg * freg * freg
+  | Fdivs of freg * freg * freg
+  | Fsqrts of freg * freg
+  | Fmvxw of reg * freg
+  | Feqs of reg * freg * freg
+  | Flts of reg * freg * freg
+  | Fles of reg * freg * freg
+  | Fmvwx of freg * reg
 
 type command =
   | Top of expr

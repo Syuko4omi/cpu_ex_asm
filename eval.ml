@@ -57,7 +57,53 @@ let binary_of_jalr regd reg1 imm env =
     (imm lsl 20) lor (r1 lsl 15) lor (rd lsl 7) lor 0b1100111
   | _ -> raise Invalid_command
 
-(*lw, sw*)
+let binary_of_lw regd imm reg1 env =
+  match regd, imm, reg1 with
+  | Regname rd, Imm imm, Regname r1 ->
+    (imm lsl 20) lor (r1 lsl 15) lor (0b010 lsl 12) lor (rd lsl 7) lor 0b11
+  | _ -> raise Invalid_command
+
+let binary_of_sw reg2 imm reg1 env =
+  match reg2, imm, reg1 with
+  | Regname r2, Imm imm, Regname r1 ->
+    (((imm land 0b111111100000) lsr 5) lsl 25) lor (r2 lsl 20) lor (r1 lsl 15) lor (0b010 lsl 12) lor ((imm land 0b11111) lsl 7) lor 0b0100011
+  | _ -> raise Invalid_command
+
+let binary_of_fop func7 func3 fregd freg1 freg2 =
+  match fregd, freg1, freg2 with
+  | Fregname fd, Fregname f1, Fregname f2 ->
+    (func7 lsl 25) lor (f2 lsl 20) lor (f1 lsl 15) lor (func3 lsl 12) lor (fd lsl 7) lor 0b1010011
+  | _ -> raise Invalid_command
+
+let binary_of_flw fregd imm freg1 env =
+  match fregd, imm, freg1 with
+  | Fregname fd, Imm imm, Fregname f1 ->
+    (imm lsl 20) lor (f1 lsl 15) lor (0b010 lsl 12) lor (fd lsl 7) lor 0b111
+  | _ -> raise Invalid_command
+
+let binary_of_fsw freg2 imm freg1 env =
+  match freg2, imm, freg1 with
+  | Fregname f2, Imm imm, Fregname f1 ->
+    (((imm land 0b111111100000) lsr 5) lsl 25) lor (f2 lsl 20) lor (f1 lsl 15) lor (0b010 lsl 12) lor ((imm land 0b11111) lsl 7) lor 0b0100111
+  | _ -> raise Invalid_command
+
+let binary_of_fmvxw regd freg1 env =
+  match regd, freg1 with
+  | Regname rd, Fregname f1 ->
+    (0b1110000 lsl 25) lor (f1 lsl 15) lor (rd lsl 7) lor 0b1010011
+  | _ -> raise Invalid_command
+
+let binary_of_fmvwx fregd reg1 env =
+  match fregd, reg1 with
+  | Fregname fd, Regname r1 ->
+    (0b1111000 lsl 25) lor (r1 lsl 15) lor (fd lsl 7) lor 0b1010011
+  | _ -> raise Invalid_command
+
+let binary_of_fbranch func7 func3 regd freg1 freg2 =
+  match regd, freg1, freg2 with
+  | Regname rd, Fregname f1, Fregname f2 ->
+    (func7 lsl 25) lor (f2 lsl 20) lor (f1 lsl 15) lor (func3 lsl 12) lor (rd lsl 7) lor 0b1010011
+  | _ -> raise Invalid_command
 
 let make_binary offset env e = match e with
   | Add (x, y, z) -> binary_of_op 0 0 x y z
@@ -85,4 +131,21 @@ let make_binary offset env e = match e with
   | Auipc (x, y) -> binary_of_auipc x y
   | Jal (x, y) -> binary_of_jal offset x y env
   | Jalr (x, y, z) -> binary_of_jalr x y z env
+  | Lw (x, y, z) -> binary_of_lw x y z env
+  | Sw (x, y, z) -> binary_of_sw x y z env
+  | Mul (x, y, z) -> binary_of_op 1 0 x y z
+  | Div (x, y, z) -> binary_of_op 1 4 x y z
+  | Rem (x, y, z) -> binary_of_op 1 5 x y z
+  | Flw (x, y, z) -> binary_of_flw x y z env
+  | Fsw (x, y, z) -> binary_of_fsw x y z env
+  | Fadds (x, y, z) -> binary_of_fop 0 0 x y z
+  | Fsubs (x, y, z) -> binary_of_fop 4 0 x y z
+  | Fmuls (x, y, z) -> binary_of_fop 8 0 x y z
+  | Fdivs (x, y, z) -> binary_of_fop 12 0 x y z
+  | Fsqrts (x, y) ->   binary_of_fop 0b101100 0 x y (Fregname(0))
+  | Fmvxw (x, y) -> binary_of_fmvxw x y env
+  | Feqs (x, y, z) -> binary_of_fbranch 0b1010000 2 x y z
+  | Flts (x, y, z) -> binary_of_fbranch 0b1010000 1 x y z
+  | Fles (x, y, z) -> binary_of_fbranch 0b1010000 0 x y z
+  | Fmvwx (x, y) -> binary_of_fmvwx x y env
   | _ -> raise Invalid_command

@@ -27,8 +27,25 @@
   24       | AUIPC REG IMM
   25       | JAL REG JMPLABEL
   26       | JALR REG REG IMM
+  27       | LW REG IMM LPAR REG RPAR
+  28       | SW REG IMM LPAR REG RPAR
+  29       | MUL REG REG REG
+  30       | DIV REG REG REG
+  31       | REM REG REG REG
+  32       | FLW FREG IMM LPAR FREG RPAR
+  33       | FSW FREG IMM LPAR FREG RPAR
+  34       | FADDS FREG FREG FREG
+  35       | FSUBS FREG FREG FREG
+  36       | FMULS FREG FREG FREG
+  37       | FDIVS FREG FREG FREG
+  38       | FSQRTS FREG FREG
+  39       | FMVXW REG FREG
+  40       | FEQS REG FREG FREG
+  41       | FLTS REG FREG FREG
+  42       | FLES REG FREG FREG
+  43       | FMVWX FREG REG
 
-  27  %entry% : '\001' toplevel
+  44  %entry% : '\001' toplevel
 
 state 0
 	$accept : . %entry% $end  (0)
@@ -40,7 +57,7 @@ state 0
 
 
 state 1
-	%entry% : '\001' . toplevel  (27)
+	%entry% : '\001' . toplevel  (44)
 
 	ADD  shift 3
 	SUB  shift 4
@@ -66,11 +83,28 @@ state 1
 	AUIPC  shift 24
 	JAL  shift 25
 	JALR  shift 26
-	LABEL  shift 27
+	LW  shift 27
+	SW  shift 28
+	MUL  shift 29
+	DIV  shift 30
+	REM  shift 31
+	FLW  shift 32
+	FSW  shift 33
+	FADDS  shift 34
+	FSUBS  shift 35
+	FMULS  shift 36
+	FDIVS  shift 37
+	FSQRTS  shift 38
+	FMVXW  shift 39
+	FEQS  shift 40
+	FLTS  shift 41
+	FLES  shift 42
+	FMVWX  shift 43
+	LABEL  shift 44
 	.  error
 
-	toplevel  goto 28
-	expr  goto 29
+	toplevel  goto 45
+	expr  goto 46
 
 
 state 2
@@ -82,654 +116,1148 @@ state 2
 state 3
 	expr : ADD . REG REG REG  (3)
 
-	REG  shift 30
+	REG  shift 47
 	.  error
 
 
 state 4
 	expr : SUB . REG REG REG  (4)
 
-	REG  shift 31
+	REG  shift 48
 	.  error
 
 
 state 5
 	expr : SLL . REG REG REG  (5)
 
-	REG  shift 32
+	REG  shift 49
 	.  error
 
 
 state 6
 	expr : SLT . REG REG REG  (6)
 
-	REG  shift 33
+	REG  shift 50
 	.  error
 
 
 state 7
 	expr : XOR . REG REG REG  (7)
 
-	REG  shift 34
+	REG  shift 51
 	.  error
 
 
 state 8
 	expr : SRL . REG REG REG  (8)
 
-	REG  shift 35
+	REG  shift 52
 	.  error
 
 
 state 9
 	expr : SRA . REG REG REG  (9)
 
-	REG  shift 36
+	REG  shift 53
 	.  error
 
 
 state 10
 	expr : OR . REG REG REG  (10)
 
-	REG  shift 37
+	REG  shift 54
 	.  error
 
 
 state 11
 	expr : ADDI . REG REG IMM  (11)
 
-	REG  shift 38
+	REG  shift 55
 	.  error
 
 
 state 12
 	expr : SLTI . REG REG IMM  (12)
 
-	REG  shift 39
+	REG  shift 56
 	.  error
 
 
 state 13
 	expr : XORI . REG REG IMM  (13)
 
-	REG  shift 40
+	REG  shift 57
 	.  error
 
 
 state 14
 	expr : ORI . REG REG IMM  (14)
 
-	REG  shift 41
+	REG  shift 58
 	.  error
 
 
 state 15
 	expr : ANDI . REG REG IMM  (15)
 
-	REG  shift 42
+	REG  shift 59
 	.  error
 
 
 state 16
 	expr : SLLI . REG REG IMM  (16)
 
-	REG  shift 43
+	REG  shift 60
 	.  error
 
 
 state 17
 	expr : SRLI . REG REG IMM  (17)
 
-	REG  shift 44
+	REG  shift 61
 	.  error
 
 
 state 18
 	expr : SRAI . REG REG IMM  (18)
 
-	REG  shift 45
+	REG  shift 62
 	.  error
 
 
 state 19
 	expr : BEQ . REG REG JMPLABEL  (19)
 
-	REG  shift 46
+	REG  shift 63
 	.  error
 
 
 state 20
 	expr : BNE . REG REG JMPLABEL  (20)
 
-	REG  shift 47
+	REG  shift 64
 	.  error
 
 
 state 21
 	expr : BLT . REG REG JMPLABEL  (21)
 
-	REG  shift 48
+	REG  shift 65
 	.  error
 
 
 state 22
 	expr : BGE . REG REG JMPLABEL  (22)
 
-	REG  shift 49
+	REG  shift 66
 	.  error
 
 
 state 23
 	expr : LUI . REG IMM  (23)
 
-	REG  shift 50
+	REG  shift 67
 	.  error
 
 
 state 24
 	expr : AUIPC . REG IMM  (24)
 
-	REG  shift 51
+	REG  shift 68
 	.  error
 
 
 state 25
 	expr : JAL . REG JMPLABEL  (25)
 
-	REG  shift 52
+	REG  shift 69
 	.  error
 
 
 state 26
 	expr : JALR . REG REG IMM  (26)
 
-	REG  shift 53
-	.  error
-
-
-state 27
-	toplevel : LABEL .  (1)
-
-	.  reduce 1
-
-
-state 28
-	%entry% : '\001' toplevel .  (27)
-
-	.  reduce 27
-
-
-state 29
-	toplevel : expr . NEWLINE  (2)
-
-	NEWLINE  shift 54
-	.  error
-
-
-state 30
-	expr : ADD REG . REG REG  (3)
-
-	REG  shift 55
-	.  error
-
-
-state 31
-	expr : SUB REG . REG REG  (4)
-
-	REG  shift 56
-	.  error
-
-
-state 32
-	expr : SLL REG . REG REG  (5)
-
-	REG  shift 57
-	.  error
-
-
-state 33
-	expr : SLT REG . REG REG  (6)
-
-	REG  shift 58
-	.  error
-
-
-state 34
-	expr : XOR REG . REG REG  (7)
-
-	REG  shift 59
-	.  error
-
-
-state 35
-	expr : SRL REG . REG REG  (8)
-
-	REG  shift 60
-	.  error
-
-
-state 36
-	expr : SRA REG . REG REG  (9)
-
-	REG  shift 61
-	.  error
-
-
-state 37
-	expr : OR REG . REG REG  (10)
-
-	REG  shift 62
-	.  error
-
-
-state 38
-	expr : ADDI REG . REG IMM  (11)
-
-	REG  shift 63
-	.  error
-
-
-state 39
-	expr : SLTI REG . REG IMM  (12)
-
-	REG  shift 64
-	.  error
-
-
-state 40
-	expr : XORI REG . REG IMM  (13)
-
-	REG  shift 65
-	.  error
-
-
-state 41
-	expr : ORI REG . REG IMM  (14)
-
-	REG  shift 66
-	.  error
-
-
-state 42
-	expr : ANDI REG . REG IMM  (15)
-
-	REG  shift 67
-	.  error
-
-
-state 43
-	expr : SLLI REG . REG IMM  (16)
-
-	REG  shift 68
-	.  error
-
-
-state 44
-	expr : SRLI REG . REG IMM  (17)
-
-	REG  shift 69
-	.  error
-
-
-state 45
-	expr : SRAI REG . REG IMM  (18)
-
 	REG  shift 70
 	.  error
 
 
-state 46
-	expr : BEQ REG . REG JMPLABEL  (19)
+state 27
+	expr : LW . REG IMM LPAR REG RPAR  (27)
 
 	REG  shift 71
 	.  error
 
 
-state 47
-	expr : BNE REG . REG JMPLABEL  (20)
+state 28
+	expr : SW . REG IMM LPAR REG RPAR  (28)
 
 	REG  shift 72
 	.  error
 
 
-state 48
-	expr : BLT REG . REG JMPLABEL  (21)
+state 29
+	expr : MUL . REG REG REG  (29)
 
 	REG  shift 73
 	.  error
 
 
-state 49
-	expr : BGE REG . REG JMPLABEL  (22)
+state 30
+	expr : DIV . REG REG REG  (30)
 
 	REG  shift 74
 	.  error
 
 
-state 50
-	expr : LUI REG . IMM  (23)
+state 31
+	expr : REM . REG REG REG  (31)
 
-	IMM  shift 75
+	REG  shift 75
 	.  error
 
 
-state 51
-	expr : AUIPC REG . IMM  (24)
+state 32
+	expr : FLW . FREG IMM LPAR FREG RPAR  (32)
 
-	IMM  shift 76
+	FREG  shift 76
 	.  error
 
 
-state 52
-	expr : JAL REG . JMPLABEL  (25)
+state 33
+	expr : FSW . FREG IMM LPAR FREG RPAR  (33)
 
-	JMPLABEL  shift 77
+	FREG  shift 77
 	.  error
 
 
-state 53
-	expr : JALR REG . REG IMM  (26)
+state 34
+	expr : FADDS . FREG FREG FREG  (34)
 
-	REG  shift 78
+	FREG  shift 78
 	.  error
 
 
-state 54
-	toplevel : expr NEWLINE .  (2)
+state 35
+	expr : FSUBS . FREG FREG FREG  (35)
 
-	.  reduce 2
-
-
-state 55
-	expr : ADD REG REG . REG  (3)
-
-	REG  shift 79
+	FREG  shift 79
 	.  error
 
 
-state 56
-	expr : SUB REG REG . REG  (4)
+state 36
+	expr : FMULS . FREG FREG FREG  (36)
 
-	REG  shift 80
+	FREG  shift 80
 	.  error
 
 
-state 57
-	expr : SLL REG REG . REG  (5)
+state 37
+	expr : FDIVS . FREG FREG FREG  (37)
 
-	REG  shift 81
+	FREG  shift 81
 	.  error
 
 
-state 58
-	expr : SLT REG REG . REG  (6)
+state 38
+	expr : FSQRTS . FREG FREG  (38)
 
-	REG  shift 82
+	FREG  shift 82
 	.  error
 
 
-state 59
-	expr : XOR REG REG . REG  (7)
+state 39
+	expr : FMVXW . REG FREG  (39)
 
 	REG  shift 83
 	.  error
 
 
-state 60
-	expr : SRL REG REG . REG  (8)
+state 40
+	expr : FEQS . REG FREG FREG  (40)
 
 	REG  shift 84
 	.  error
 
 
-state 61
-	expr : SRA REG REG . REG  (9)
+state 41
+	expr : FLTS . REG FREG FREG  (41)
 
 	REG  shift 85
 	.  error
 
 
-state 62
-	expr : OR REG REG . REG  (10)
+state 42
+	expr : FLES . REG FREG FREG  (42)
 
 	REG  shift 86
 	.  error
 
 
-state 63
-	expr : ADDI REG REG . IMM  (11)
+state 43
+	expr : FMVWX . FREG REG  (43)
 
-	IMM  shift 87
+	FREG  shift 87
+	.  error
+
+
+state 44
+	toplevel : LABEL .  (1)
+
+	.  reduce 1
+
+
+state 45
+	%entry% : '\001' toplevel .  (44)
+
+	.  reduce 44
+
+
+state 46
+	toplevel : expr . NEWLINE  (2)
+
+	NEWLINE  shift 88
+	.  error
+
+
+state 47
+	expr : ADD REG . REG REG  (3)
+
+	REG  shift 89
+	.  error
+
+
+state 48
+	expr : SUB REG . REG REG  (4)
+
+	REG  shift 90
+	.  error
+
+
+state 49
+	expr : SLL REG . REG REG  (5)
+
+	REG  shift 91
+	.  error
+
+
+state 50
+	expr : SLT REG . REG REG  (6)
+
+	REG  shift 92
+	.  error
+
+
+state 51
+	expr : XOR REG . REG REG  (7)
+
+	REG  shift 93
+	.  error
+
+
+state 52
+	expr : SRL REG . REG REG  (8)
+
+	REG  shift 94
+	.  error
+
+
+state 53
+	expr : SRA REG . REG REG  (9)
+
+	REG  shift 95
+	.  error
+
+
+state 54
+	expr : OR REG . REG REG  (10)
+
+	REG  shift 96
+	.  error
+
+
+state 55
+	expr : ADDI REG . REG IMM  (11)
+
+	REG  shift 97
+	.  error
+
+
+state 56
+	expr : SLTI REG . REG IMM  (12)
+
+	REG  shift 98
+	.  error
+
+
+state 57
+	expr : XORI REG . REG IMM  (13)
+
+	REG  shift 99
+	.  error
+
+
+state 58
+	expr : ORI REG . REG IMM  (14)
+
+	REG  shift 100
+	.  error
+
+
+state 59
+	expr : ANDI REG . REG IMM  (15)
+
+	REG  shift 101
+	.  error
+
+
+state 60
+	expr : SLLI REG . REG IMM  (16)
+
+	REG  shift 102
+	.  error
+
+
+state 61
+	expr : SRLI REG . REG IMM  (17)
+
+	REG  shift 103
+	.  error
+
+
+state 62
+	expr : SRAI REG . REG IMM  (18)
+
+	REG  shift 104
+	.  error
+
+
+state 63
+	expr : BEQ REG . REG JMPLABEL  (19)
+
+	REG  shift 105
 	.  error
 
 
 state 64
-	expr : SLTI REG REG . IMM  (12)
+	expr : BNE REG . REG JMPLABEL  (20)
 
-	IMM  shift 88
+	REG  shift 106
 	.  error
 
 
 state 65
-	expr : XORI REG REG . IMM  (13)
+	expr : BLT REG . REG JMPLABEL  (21)
 
-	IMM  shift 89
+	REG  shift 107
 	.  error
 
 
 state 66
-	expr : ORI REG REG . IMM  (14)
+	expr : BGE REG . REG JMPLABEL  (22)
 
-	IMM  shift 90
+	REG  shift 108
 	.  error
 
 
 state 67
-	expr : ANDI REG REG . IMM  (15)
+	expr : LUI REG . IMM  (23)
 
-	IMM  shift 91
+	IMM  shift 109
 	.  error
 
 
 state 68
-	expr : SLLI REG REG . IMM  (16)
+	expr : AUIPC REG . IMM  (24)
 
-	IMM  shift 92
+	IMM  shift 110
 	.  error
 
 
 state 69
-	expr : SRLI REG REG . IMM  (17)
+	expr : JAL REG . JMPLABEL  (25)
 
-	IMM  shift 93
+	JMPLABEL  shift 111
 	.  error
 
 
 state 70
-	expr : SRAI REG REG . IMM  (18)
+	expr : JALR REG . REG IMM  (26)
 
-	IMM  shift 94
+	REG  shift 112
 	.  error
 
 
 state 71
-	expr : BEQ REG REG . JMPLABEL  (19)
+	expr : LW REG . IMM LPAR REG RPAR  (27)
 
-	JMPLABEL  shift 95
+	IMM  shift 113
 	.  error
 
 
 state 72
-	expr : BNE REG REG . JMPLABEL  (20)
+	expr : SW REG . IMM LPAR REG RPAR  (28)
 
-	JMPLABEL  shift 96
+	IMM  shift 114
 	.  error
 
 
 state 73
-	expr : BLT REG REG . JMPLABEL  (21)
+	expr : MUL REG . REG REG  (29)
 
-	JMPLABEL  shift 97
+	REG  shift 115
 	.  error
 
 
 state 74
-	expr : BGE REG REG . JMPLABEL  (22)
+	expr : DIV REG . REG REG  (30)
 
-	JMPLABEL  shift 98
+	REG  shift 116
 	.  error
 
 
 state 75
+	expr : REM REG . REG REG  (31)
+
+	REG  shift 117
+	.  error
+
+
+state 76
+	expr : FLW FREG . IMM LPAR FREG RPAR  (32)
+
+	IMM  shift 118
+	.  error
+
+
+state 77
+	expr : FSW FREG . IMM LPAR FREG RPAR  (33)
+
+	IMM  shift 119
+	.  error
+
+
+state 78
+	expr : FADDS FREG . FREG FREG  (34)
+
+	FREG  shift 120
+	.  error
+
+
+state 79
+	expr : FSUBS FREG . FREG FREG  (35)
+
+	FREG  shift 121
+	.  error
+
+
+state 80
+	expr : FMULS FREG . FREG FREG  (36)
+
+	FREG  shift 122
+	.  error
+
+
+state 81
+	expr : FDIVS FREG . FREG FREG  (37)
+
+	FREG  shift 123
+	.  error
+
+
+state 82
+	expr : FSQRTS FREG . FREG  (38)
+
+	FREG  shift 124
+	.  error
+
+
+state 83
+	expr : FMVXW REG . FREG  (39)
+
+	FREG  shift 125
+	.  error
+
+
+state 84
+	expr : FEQS REG . FREG FREG  (40)
+
+	FREG  shift 126
+	.  error
+
+
+state 85
+	expr : FLTS REG . FREG FREG  (41)
+
+	FREG  shift 127
+	.  error
+
+
+state 86
+	expr : FLES REG . FREG FREG  (42)
+
+	FREG  shift 128
+	.  error
+
+
+state 87
+	expr : FMVWX FREG . REG  (43)
+
+	REG  shift 129
+	.  error
+
+
+state 88
+	toplevel : expr NEWLINE .  (2)
+
+	.  reduce 2
+
+
+state 89
+	expr : ADD REG REG . REG  (3)
+
+	REG  shift 130
+	.  error
+
+
+state 90
+	expr : SUB REG REG . REG  (4)
+
+	REG  shift 131
+	.  error
+
+
+state 91
+	expr : SLL REG REG . REG  (5)
+
+	REG  shift 132
+	.  error
+
+
+state 92
+	expr : SLT REG REG . REG  (6)
+
+	REG  shift 133
+	.  error
+
+
+state 93
+	expr : XOR REG REG . REG  (7)
+
+	REG  shift 134
+	.  error
+
+
+state 94
+	expr : SRL REG REG . REG  (8)
+
+	REG  shift 135
+	.  error
+
+
+state 95
+	expr : SRA REG REG . REG  (9)
+
+	REG  shift 136
+	.  error
+
+
+state 96
+	expr : OR REG REG . REG  (10)
+
+	REG  shift 137
+	.  error
+
+
+state 97
+	expr : ADDI REG REG . IMM  (11)
+
+	IMM  shift 138
+	.  error
+
+
+state 98
+	expr : SLTI REG REG . IMM  (12)
+
+	IMM  shift 139
+	.  error
+
+
+state 99
+	expr : XORI REG REG . IMM  (13)
+
+	IMM  shift 140
+	.  error
+
+
+state 100
+	expr : ORI REG REG . IMM  (14)
+
+	IMM  shift 141
+	.  error
+
+
+state 101
+	expr : ANDI REG REG . IMM  (15)
+
+	IMM  shift 142
+	.  error
+
+
+state 102
+	expr : SLLI REG REG . IMM  (16)
+
+	IMM  shift 143
+	.  error
+
+
+state 103
+	expr : SRLI REG REG . IMM  (17)
+
+	IMM  shift 144
+	.  error
+
+
+state 104
+	expr : SRAI REG REG . IMM  (18)
+
+	IMM  shift 145
+	.  error
+
+
+state 105
+	expr : BEQ REG REG . JMPLABEL  (19)
+
+	JMPLABEL  shift 146
+	.  error
+
+
+state 106
+	expr : BNE REG REG . JMPLABEL  (20)
+
+	JMPLABEL  shift 147
+	.  error
+
+
+state 107
+	expr : BLT REG REG . JMPLABEL  (21)
+
+	JMPLABEL  shift 148
+	.  error
+
+
+state 108
+	expr : BGE REG REG . JMPLABEL  (22)
+
+	JMPLABEL  shift 149
+	.  error
+
+
+state 109
 	expr : LUI REG IMM .  (23)
 
 	.  reduce 23
 
 
-state 76
+state 110
 	expr : AUIPC REG IMM .  (24)
 
 	.  reduce 24
 
 
-state 77
+state 111
 	expr : JAL REG JMPLABEL .  (25)
 
 	.  reduce 25
 
 
-state 78
+state 112
 	expr : JALR REG REG . IMM  (26)
 
-	IMM  shift 99
+	IMM  shift 150
 	.  error
 
 
-state 79
+state 113
+	expr : LW REG IMM . LPAR REG RPAR  (27)
+
+	LPAR  shift 151
+	.  error
+
+
+state 114
+	expr : SW REG IMM . LPAR REG RPAR  (28)
+
+	LPAR  shift 152
+	.  error
+
+
+state 115
+	expr : MUL REG REG . REG  (29)
+
+	REG  shift 153
+	.  error
+
+
+state 116
+	expr : DIV REG REG . REG  (30)
+
+	REG  shift 154
+	.  error
+
+
+state 117
+	expr : REM REG REG . REG  (31)
+
+	REG  shift 155
+	.  error
+
+
+state 118
+	expr : FLW FREG IMM . LPAR FREG RPAR  (32)
+
+	LPAR  shift 156
+	.  error
+
+
+state 119
+	expr : FSW FREG IMM . LPAR FREG RPAR  (33)
+
+	LPAR  shift 157
+	.  error
+
+
+state 120
+	expr : FADDS FREG FREG . FREG  (34)
+
+	FREG  shift 158
+	.  error
+
+
+state 121
+	expr : FSUBS FREG FREG . FREG  (35)
+
+	FREG  shift 159
+	.  error
+
+
+state 122
+	expr : FMULS FREG FREG . FREG  (36)
+
+	FREG  shift 160
+	.  error
+
+
+state 123
+	expr : FDIVS FREG FREG . FREG  (37)
+
+	FREG  shift 161
+	.  error
+
+
+state 124
+	expr : FSQRTS FREG FREG .  (38)
+
+	.  reduce 38
+
+
+state 125
+	expr : FMVXW REG FREG .  (39)
+
+	.  reduce 39
+
+
+state 126
+	expr : FEQS REG FREG . FREG  (40)
+
+	FREG  shift 162
+	.  error
+
+
+state 127
+	expr : FLTS REG FREG . FREG  (41)
+
+	FREG  shift 163
+	.  error
+
+
+state 128
+	expr : FLES REG FREG . FREG  (42)
+
+	FREG  shift 164
+	.  error
+
+
+state 129
+	expr : FMVWX FREG REG .  (43)
+
+	.  reduce 43
+
+
+state 130
 	expr : ADD REG REG REG .  (3)
 
 	.  reduce 3
 
 
-state 80
+state 131
 	expr : SUB REG REG REG .  (4)
 
 	.  reduce 4
 
 
-state 81
+state 132
 	expr : SLL REG REG REG .  (5)
 
 	.  reduce 5
 
 
-state 82
+state 133
 	expr : SLT REG REG REG .  (6)
 
 	.  reduce 6
 
 
-state 83
+state 134
 	expr : XOR REG REG REG .  (7)
 
 	.  reduce 7
 
 
-state 84
+state 135
 	expr : SRL REG REG REG .  (8)
 
 	.  reduce 8
 
 
-state 85
+state 136
 	expr : SRA REG REG REG .  (9)
 
 	.  reduce 9
 
 
-state 86
+state 137
 	expr : OR REG REG REG .  (10)
 
 	.  reduce 10
 
 
-state 87
+state 138
 	expr : ADDI REG REG IMM .  (11)
 
 	.  reduce 11
 
 
-state 88
+state 139
 	expr : SLTI REG REG IMM .  (12)
 
 	.  reduce 12
 
 
-state 89
+state 140
 	expr : XORI REG REG IMM .  (13)
 
 	.  reduce 13
 
 
-state 90
+state 141
 	expr : ORI REG REG IMM .  (14)
 
 	.  reduce 14
 
 
-state 91
+state 142
 	expr : ANDI REG REG IMM .  (15)
 
 	.  reduce 15
 
 
-state 92
+state 143
 	expr : SLLI REG REG IMM .  (16)
 
 	.  reduce 16
 
 
-state 93
+state 144
 	expr : SRLI REG REG IMM .  (17)
 
 	.  reduce 17
 
 
-state 94
+state 145
 	expr : SRAI REG REG IMM .  (18)
 
 	.  reduce 18
 
 
-state 95
+state 146
 	expr : BEQ REG REG JMPLABEL .  (19)
 
 	.  reduce 19
 
 
-state 96
+state 147
 	expr : BNE REG REG JMPLABEL .  (20)
 
 	.  reduce 20
 
 
-state 97
+state 148
 	expr : BLT REG REG JMPLABEL .  (21)
 
 	.  reduce 21
 
 
-state 98
+state 149
 	expr : BGE REG REG JMPLABEL .  (22)
 
 	.  reduce 22
 
 
-state 99
+state 150
 	expr : JALR REG REG IMM .  (26)
 
 	.  reduce 26
 
 
-35 terminals, 4 nonterminals
-28 grammar rules, 100 states
+state 151
+	expr : LW REG IMM LPAR . REG RPAR  (27)
+
+	REG  shift 165
+	.  error
+
+
+state 152
+	expr : SW REG IMM LPAR . REG RPAR  (28)
+
+	REG  shift 166
+	.  error
+
+
+state 153
+	expr : MUL REG REG REG .  (29)
+
+	.  reduce 29
+
+
+state 154
+	expr : DIV REG REG REG .  (30)
+
+	.  reduce 30
+
+
+state 155
+	expr : REM REG REG REG .  (31)
+
+	.  reduce 31
+
+
+state 156
+	expr : FLW FREG IMM LPAR . FREG RPAR  (32)
+
+	FREG  shift 167
+	.  error
+
+
+state 157
+	expr : FSW FREG IMM LPAR . FREG RPAR  (33)
+
+	FREG  shift 168
+	.  error
+
+
+state 158
+	expr : FADDS FREG FREG FREG .  (34)
+
+	.  reduce 34
+
+
+state 159
+	expr : FSUBS FREG FREG FREG .  (35)
+
+	.  reduce 35
+
+
+state 160
+	expr : FMULS FREG FREG FREG .  (36)
+
+	.  reduce 36
+
+
+state 161
+	expr : FDIVS FREG FREG FREG .  (37)
+
+	.  reduce 37
+
+
+state 162
+	expr : FEQS REG FREG FREG .  (40)
+
+	.  reduce 40
+
+
+state 163
+	expr : FLTS REG FREG FREG .  (41)
+
+	.  reduce 41
+
+
+state 164
+	expr : FLES REG FREG FREG .  (42)
+
+	.  reduce 42
+
+
+state 165
+	expr : LW REG IMM LPAR REG . RPAR  (27)
+
+	RPAR  shift 169
+	.  error
+
+
+state 166
+	expr : SW REG IMM LPAR REG . RPAR  (28)
+
+	RPAR  shift 170
+	.  error
+
+
+state 167
+	expr : FLW FREG IMM LPAR FREG . RPAR  (32)
+
+	RPAR  shift 171
+	.  error
+
+
+state 168
+	expr : FSW FREG IMM LPAR FREG . RPAR  (33)
+
+	RPAR  shift 172
+	.  error
+
+
+state 169
+	expr : LW REG IMM LPAR REG RPAR .  (27)
+
+	.  reduce 27
+
+
+state 170
+	expr : SW REG IMM LPAR REG RPAR .  (28)
+
+	.  reduce 28
+
+
+state 171
+	expr : FLW FREG IMM LPAR FREG RPAR .  (32)
+
+	.  reduce 32
+
+
+state 172
+	expr : FSW FREG IMM LPAR FREG RPAR .  (33)
+
+	.  reduce 33
+
+
+53 terminals, 4 nonterminals
+45 grammar rules, 173 states

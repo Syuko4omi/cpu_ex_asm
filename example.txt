@@ -1,4 +1,5 @@
-(*sum 1 to 10
+(*
+sum 1 to 10
 L1:
 addi t0, zero, 0
 addi t1, zero, 0
@@ -10,7 +11,19 @@ beq t0, t2, L3
 jal ra, L2
 L3:
 add a0, t1, zero
-jalr zero, ra, 0*)
+jalr zero, ra, 0
+
+expected output
+293
+313
+a00393
+128293
+530333
+728463
+ff5ff0ef
+30533
+8067
+*)
 
 
 (*fibonacchi
@@ -33,4 +46,23 @@ addi t0, t0, 1
 jal ra, L2
 L3:
 add a0, t4, zero
-jalr zero, ra, 0*)
+jalr zero, ra, 0
+
+expected output
+a00e13
+100e93
+1cec663
+e0eb3
+28000ef
+100e93
+100f13
+200293
+1c2dc63
+e8fb3
+1ee8eb3
+f8f33
+128293
+fedff0ef
+e8533
+8067
+*)
