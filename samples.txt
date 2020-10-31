@@ -12,6 +12,34 @@ L3:
 add a0, t1, zero
 jalr zero, ra, 0
 
+(*expected output*)
+293
+313
+a00393
+128293
+530333
+728463
+ff5ff0ef
+30533
+8067
+
+(*expected output*)
+a00e13
+100e93
+1cec663
+e0eb3
+28000ef
+100e93
+100f13
+200293
+1c2dc63
+e8fb3
+1ee8eb3
+f8f33
+128293
+fedff0ef
+e8533
+8067
 
 
 (*fibonacchi*)
@@ -43,6 +71,10 @@ addi t0, zero, 5
 sw t0, 10(zero)
 lw t1, 10(zero)
 
+(*expected output*)
+500293
+502523
+a02303
 
 
 
@@ -55,3 +87,15 @@ fmvwx ft2, t1
 fmuls ft3, ft2, ft1
 fadds ft4, ft1, ft3
 flts t0, ft1, ft4
+fmvxw t1, ft4
+
+(*expected output*)
+500293
+f0028053
+580000d3
+400313
+f0030153
+101101d3
+308253
+a04092d3
+e0020353

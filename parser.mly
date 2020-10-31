@@ -25,7 +25,7 @@
 %%
 
 toplevel:
-  | LABEL { Top_label $1 }
+  | LABEL NEWLINE { Top_label $1 }
   | expr NEWLINE { Top $1 }
 ;
 
