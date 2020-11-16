@@ -1,5 +1,5 @@
 SOURCES = syntax.ml lexer.mll parser.mly eval.ml main.ml
-RESULT  = main
+RESULT  = asm
 
 YFLAGS = -v 
 
