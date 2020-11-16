@@ -23,25 +23,6 @@ ff5ff0ef
 30533
 8067
 
-(*expected output*)
-a00e13
-100e93
-1cec663
-e0eb3
-28000ef
-100e93
-100f13
-200293
-1c2dc63
-e8fb3
-1ee8eb3
-f8f33
-128293
-fedff0ef
-e8533
-8067
-
-
 (*fibonacchi*)
 main:
 addi t3, zero, 10
@@ -64,6 +45,23 @@ L3:
 add a0, t4, zero
 jalr zero, ra, 0
 
+(*expected output*)
+a00e13
+100e93
+1cec663
+e0eb3
+28000ef
+100e93
+100f13
+200293
+1c2dc63
+e8fb3
+1ee8eb3
+f8f33
+128293
+fedff0ef
+e8533
+8067
 
 
 (*store/load*)
