@@ -7,7 +7,7 @@
 %token ADDI SLTI XORI ORI ANDI
 %token SLLI SRLI SRAI
 %token BEQ BNE BLT BGE
-%token LUI AUIPC
+%token LUI LI AUIPC
 %token JAL JALR
 %token LW SW
 %token MUL DIV REM
@@ -51,6 +51,7 @@ expr:
   | BLT REG REG JMPLABEL          {Blt ( Regname($2),  Regname($3), Jmplabel($4))}
   | BGE REG REG JMPLABEL          {Bge ( Regname($2),  Regname($3), Jmplabel($4))}
   | LUI REG IMM                   {Lui ( Regname($2), Imm($3))}
+  | LI REG IMM                    {Li  ( Regname($2), Imm($3))}
   | AUIPC REG IMM                 {Auipc ( Regname($2),  Imm($3))}
   | JAL REG JMPLABEL              {Jal ( Regname($2),  Jmplabel($3))}
   | JALR REG REG IMM              {Jalr ( Regname($2),  Regname($3),  Imm($4))}

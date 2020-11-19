@@ -29,12 +29,12 @@ let binary_of_branch offset func3 reg1 reg2 imm env =
 let binary_of_lui regd imm =
   match regd, imm with
   | Regname rd, Imm imm ->
-    ((imm lsr 12) lsl 12) lor (rd lsl 7) lor 0b110111
+    (imm lsl 12) lor (rd lsl 7) lor 0b0110111
 
 let binary_of_auipc regd imm =
   match regd, imm with
   | Regname rd, Imm imm ->
-    ((imm lsr 12) lsl 12) lor (rd lsl 7) lor 0b010111
+    (imm lsl 12) lor (rd lsl 7) lor 0b010111
 
 let binary_of_jal offset regd imm env =
   match regd, imm with

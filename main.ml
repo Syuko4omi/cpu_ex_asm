@@ -20,7 +20,13 @@ let rec read_eval sta =
     let cmd = Parser.toplevel Lexer.main lexbuf in
     match cmd with
       | Top_label l -> read_eval {sta with env = (l, sta.row_num)::sta.env}
-      | Top exp -> read_eval {sta with row_num = sta.row_num+1; exprs = exp::sta.exprs}
+      | Top exp ->
+        (match exp with
+        | Li (x, Imm imm) ->
+          let exp1 = Lui (x, Imm (imm lsr 12)) in
+          let exp2 = Addi (x, x, Imm (imm land 0b111111111111)) in
+          read_eval {sta with row_num = sta.row_num+2; exprs = exp2::(exp1::sta.exprs)}
+        | _ -> read_eval {sta with row_num = sta.row_num+1; exprs = exp::sta.exprs})
   with
     End_of_file -> (List.rev(sta.env), List.rev(sta.exprs))
 

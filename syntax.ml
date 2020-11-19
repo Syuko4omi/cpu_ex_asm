@@ -34,6 +34,7 @@ type expr =
   | Blt of reg * reg * jmplabel
   | Bge of reg * reg * jmplabel
   | Lui of reg * imm
+  | Li of reg * imm
   | Auipc of reg * imm
   | Jal of reg * jmplabel
   | Jalr of reg * reg * imm

@@ -85,6 +85,7 @@ rule main = parse
 | "blt"                 { BLT }
 | "bge"                 { BGE }
 | "lui"                 { LUI }
+| "li"                  { LI }
 | "auipc"               { AUIPC }
 | "jal"                 { JAL }
 | "jalr"                { JALR }
