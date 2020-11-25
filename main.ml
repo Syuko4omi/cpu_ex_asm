@@ -40,7 +40,7 @@ let assemble env exprs =
     let rec hoge temp =
       match temp with
         | [] -> print_string "\n"
-        | r :: rest -> Printf.printf "%x\n" r; hoge rest in
+        | r :: rest -> Printf.printf "%lx\n" r; hoge rest in
       hoge l
 
 let _ =
