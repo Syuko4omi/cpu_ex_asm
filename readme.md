@@ -29,4 +29,4 @@ python txt_to_bin.py hoge.txt hoge.bin
 とすればよい。
 
 ### 擬似命令liの分解（preprocess.py）
-li命令をlui,addiに分解した機械語を生成する。li <reg>, <label>となっている（即値としてラベルが埋め込まれている）場合は、ここで解決する。
+li命令をlui,addiに分解した機械語を生成する。li (reg), (label)となっている（即値としてラベルが埋め込まれている）場合は、ここで解決する。
