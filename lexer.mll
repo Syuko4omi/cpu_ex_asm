@@ -6,7 +6,7 @@ let natural_num = ['1'-'9'] ['0'-'9']* | '0'
 let digit = '-'? natural_num
 let reg_num = ['1'-'2']? ['0'-'9'] | ['3'] ['0'-'1']
 let space = ' ' | '\t' | '\r'
-let text_ele = ['a'-'z' 'A'-'Z' '_' '0'-'9' '-']
+let text_ele = ['a'-'z' 'A'-'Z' '_' '0'-'9' '-' '.']
 
 rule main = parse
 | space+ | ','          { main lexbuf } (*skip blank*)
@@ -21,6 +21,7 @@ rule main = parse
 | "t0"                  { (REG (5)) }
 | "t1"                  { (REG (6)) }
 | "t2"                  { (REG (7)) }
+| "fp"                  { (REG (8)) }
 | "s0"                  { (REG (8)) }
 | "s1"                  { (REG (9)) }
 | 'a' (reg_num as x)    { (REG ((int_of_string x)+10)) }
