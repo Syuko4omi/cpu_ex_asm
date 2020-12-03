@@ -33,8 +33,8 @@
   30       | MUL REG REG REG
   31       | DIV REG REG REG
   32       | REM REG REG REG
-  33       | FLW FREG IMM LPAR FREG RPAR
-  34       | FSW FREG IMM LPAR FREG RPAR
+  33       | FLW FREG IMM LPAR REG RPAR
+  34       | FSW FREG IMM LPAR REG RPAR
   35       | FADDS FREG FREG FREG
   36       | FSUBS FREG FREG FREG
   37       | FMULS FREG FREG FREG
@@ -326,14 +326,14 @@ state 32
 
 
 state 33
-	expr : FLW . FREG IMM LPAR FREG RPAR  (33)
+	expr : FLW . FREG IMM LPAR REG RPAR  (33)
 
 	FREG  shift 78
 	.  error
 
 
 state 34
-	expr : FSW . FREG IMM LPAR FREG RPAR  (34)
+	expr : FSW . FREG IMM LPAR REG RPAR  (34)
 
 	FREG  shift 79
 	.  error
@@ -640,14 +640,14 @@ state 77
 
 
 state 78
-	expr : FLW FREG . IMM LPAR FREG RPAR  (33)
+	expr : FLW FREG . IMM LPAR REG RPAR  (33)
 
 	IMM  shift 122
 	.  error
 
 
 state 79
-	expr : FSW FREG . IMM LPAR FREG RPAR  (34)
+	expr : FSW FREG . IMM LPAR REG RPAR  (34)
 
 	IMM  shift 123
 	.  error
@@ -942,14 +942,14 @@ state 121
 
 
 state 122
-	expr : FLW FREG IMM . LPAR FREG RPAR  (33)
+	expr : FLW FREG IMM . LPAR REG RPAR  (33)
 
 	LPAR  shift 160
 	.  error
 
 
 state 123
-	expr : FSW FREG IMM . LPAR FREG RPAR  (34)
+	expr : FSW FREG IMM . LPAR REG RPAR  (34)
 
 	LPAR  shift 161
 	.  error
@@ -1181,16 +1181,16 @@ state 159
 
 
 state 160
-	expr : FLW FREG IMM LPAR . FREG RPAR  (33)
+	expr : FLW FREG IMM LPAR . REG RPAR  (33)
 
-	FREG  shift 171
+	REG  shift 171
 	.  error
 
 
 state 161
-	expr : FSW FREG IMM LPAR . FREG RPAR  (34)
+	expr : FSW FREG IMM LPAR . REG RPAR  (34)
 
-	FREG  shift 172
+	REG  shift 172
 	.  error
 
 
@@ -1251,14 +1251,14 @@ state 170
 
 
 state 171
-	expr : FLW FREG IMM LPAR FREG . RPAR  (33)
+	expr : FLW FREG IMM LPAR REG . RPAR  (33)
 
 	RPAR  shift 175
 	.  error
 
 
 state 172
-	expr : FSW FREG IMM LPAR FREG . RPAR  (34)
+	expr : FSW FREG IMM LPAR REG . RPAR  (34)
 
 	RPAR  shift 176
 	.  error
@@ -1277,13 +1277,13 @@ state 174
 
 
 state 175
-	expr : FLW FREG IMM LPAR FREG RPAR .  (33)
+	expr : FLW FREG IMM LPAR REG RPAR .  (33)
 
 	.  reduce 33
 
 
 state 176
-	expr : FSW FREG IMM LPAR FREG RPAR .  (34)
+	expr : FSW FREG IMM LPAR REG RPAR .  (34)
 
 	.  reduce 34
 

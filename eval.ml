@@ -62,14 +62,14 @@ let binary_of_fop func7 func3 fregd freg1 freg2 =
   | Fregname fd, Fregname f1, Fregname f2 ->
     Int32.of_int((func7 lsl 25) lor (f2 lsl 20) lor (f1 lsl 15) lor (func3 lsl 12) lor (fd lsl 7) lor 0b1010011)
 
-let binary_of_flw fregd imm freg1 =
-  match fregd, imm, freg1 with
-  | Fregname fd, Imm imm, Fregname f1 ->
+let binary_of_flw fregd imm reg1 =
+  match fregd, imm, reg1 with
+  | Fregname fd, Imm imm, Regname f1 ->
     Int32.of_int((imm lsl 20) lor (f1 lsl 15) lor (0b010 lsl 12) lor (fd lsl 7) lor 0b111)
 
-let binary_of_fsw freg2 imm freg1 =
-  match freg2, imm, freg1 with
-  | Fregname f2, Imm imm, Fregname f1 ->
+let binary_of_fsw freg2 imm reg1 =
+  match freg2, imm, reg1 with
+  | Fregname f2, Imm imm, Regname f1 ->
     Int32.of_int((((imm land 0b111111100000) lsr 5) lsl 25) lor (f2 lsl 20) lor (f1 lsl 15) lor (0b010 lsl 12) lor ((imm land 0b11111) lsl 7) lor 0b0100111)
 
 let binary_of_fmvxw regd freg1 =

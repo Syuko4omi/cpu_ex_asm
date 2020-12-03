@@ -60,10 +60,10 @@ rule main = parse
 | "fs9"                 { (FREG (25)) }
 | "fs10"                { (FREG (26)) }
 | "fs11"                { (FREG (27)) }
-| "ft3"                 { (FREG (28)) }
-| "ft4"                 { (FREG (29)) }
-| "ft5"                 { (FREG (30)) }
-| "ft6"                 { (FREG (31)) }
+| "ft8"                 { (FREG (28)) }
+| "ft9"                 { (FREG (29)) }
+| "ft10"                { (FREG (30)) }
+| "ft11"                { (FREG (31)) }
 | "add"                 { ADD }
 | "sub"                 { SUB }
 | "sll"                 { SLL }
@@ -97,16 +97,16 @@ rule main = parse
 | "rem"                 { REM }
 | "flw"                 { FLW }
 | "fsw"                 { FSW }
-| "fadds"               { FADDS }
-| "fsubs"               { FSUBS }
-| "fmuls"               { FMULS }
-| "fdivs"               { FDIVS }
-| "fsqrts"              { FSQRTS }
-| "fmvxw"               { FMVXW }
-| "feqs"                { FEQS }
-| "flts"                { FLTS }
-| "fles"                { FLES }
-| "fmvwx"               { FMVWX }
+| "fadd.s"              { FADDS }
+| "fsub.s"              { FSUBS }
+| "fmul.s"              { FMULS }
+| "fdiv.s"              { FDIVS }
+| "fsqrt.s"             { FSQRTS }
+| "fmv.x.w"             { FMVXW }
+| "feq.s"               { FEQS }
+| "flt.s"               { FLTS }
+| "fle.s"               { FLES }
+| "fmv.w.x"             { FMVWX }
 | "("                   { LPAR }
 | ")"                   { RPAR }
 | eof                   { raise End_of_file }

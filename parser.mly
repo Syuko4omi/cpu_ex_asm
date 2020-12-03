@@ -60,8 +60,8 @@ expr:
   | MUL REG REG REG               {Mul (Regname($2), Regname($3), Regname($4))}
   | DIV REG REG REG               {Div (Regname($2), Regname($3), Regname($4))}
   | REM REG REG REG               {Rem (Regname($2), Regname($3), Regname($4))}
-  | FLW FREG IMM LPAR FREG RPAR   {Flw ( Fregname($2),  Imm($3),  Fregname($5))}
-  | FSW FREG IMM LPAR FREG RPAR   {Fsw ( Fregname($2),  Imm($3),  Fregname($5))}
+  | FLW FREG IMM LPAR REG RPAR   {Flw ( Fregname($2),  Imm($3),  Regname($5))}
+  | FSW FREG IMM LPAR REG RPAR   {Fsw ( Fregname($2),  Imm($3),  Regname($5))}
   | FADDS FREG FREG FREG          {Fadds (Fregname($2), Fregname($3), Fregname($4))}
   | FSUBS FREG FREG FREG          {Fsubs (Fregname($2), Fregname($3), Fregname($4))}
   | FMULS FREG FREG FREG          {Fmuls (Fregname($2), Fregname($3), Fregname($4))}

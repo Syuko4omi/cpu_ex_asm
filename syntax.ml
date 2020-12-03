@@ -43,8 +43,8 @@ type expr =
   | Mul of reg * reg * reg
   | Div of reg * reg * reg
   | Rem of reg * reg * reg
-  | Flw of freg * imm * freg
-  | Fsw of freg * imm * freg
+  | Flw of freg * imm * reg
+  | Fsw of freg * imm * reg
   | Fadds of freg * freg * freg
   | Fsubs of freg * freg * freg
   | Fmuls of freg * freg * freg
