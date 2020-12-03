@@ -89,6 +89,3 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                 break
             else:
                 fout.write(Insts[i])
-print(Label)
-print(Insts)
-print(Li_Imm)
