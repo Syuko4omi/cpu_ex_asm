@@ -82,13 +82,18 @@ rule main = parse
 | "srli"                { SRLI }
 | "srai"                { SRAI }
 | "beq"                 { BEQ }
+| "beq_i"               { BEQI }
 | "bne"                 { BNE }
+| "bne_i"               { BNEI }
 | "blt"                 { BLT }
+| "blt_i"               { BLTI }
 | "bge"                 { BGE }
+| "bge_i"               { BGEI }
 | "lui"                 { LUI }
 | "li"                  { LI }
 | "auipc"               { AUIPC }
 | "jal"                 { JAL }
+| "jal_i"               { JALI }
 | "jalr"                { JALR }
 | "lw"                  { LW }
 | "sw"                  { SW }
@@ -102,11 +107,17 @@ rule main = parse
 | "fmul.s"              { FMULS }
 | "fdiv.s"              { FDIVS }
 | "fsqrt.s"             { FSQRTS }
+| "fcvt.w.s"            { FCVTWS }
+| "fcvt.w.s.rdn"        { FCVTWSRDN }
 | "fmv.x.w"             { FMVXW }
 | "feq.s"               { FEQS }
 | "flt.s"               { FLTS }
 | "fle.s"               { FLES }
+| "fcvt.s.w"            { FCVTSW }
+| "fcvt.s.w.rdn"        { FCVTSWRDN }
 | "fmv.w.x"             { FMVWX }
+| "send"                { SEND }
+| "recv"                { RECV }
 | "("                   { LPAR }
 | ")"                   { RPAR }
 | eof                   { raise End_of_file }

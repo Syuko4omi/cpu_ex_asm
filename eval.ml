@@ -23,8 +23,13 @@ let binary_of_op_imm_shift func7 func3 regd reg1 imm =
 let binary_of_branch offset func3 reg1 reg2 imm env =
   match reg1, reg2, imm with
   | Regname r1, Regname r2, Jmplabel l ->
-    let imm = ((find_label_num l env) - offset)*4 in
-    Int32.of_int((((imm land 4096) lsr 12) lsl 31) lor (((imm land 0b11111100000) lsr 5) lsl 25) lor (r2 lsl 20) lor (r1 lsl 15) lor (func3 lsl 12) lor (((imm land 0b11110) lsr 1) lsl 8) lor (((imm land 2048) lsr 11) lsl 7) lor 0b1100011)
+    let i = ((find_label_num l env) - offset)*4 in
+    Int32.of_int((((i land 4096) lsr 12) lsl 31) lor (((i land 0b11111100000) lsr 5) lsl 25) lor (r2 lsl 20) lor (r1 lsl 15) lor (func3 lsl 12) lor (((i land 0b11110) lsr 1) lsl 8) lor (((i land 2048) lsr 11) lsl 7) lor 0b1100011)
+
+let binary_of_branch_imm offset func3 reg1 reg2 imm env =
+  match reg1, reg2, imm with
+  | Regname r1, Regname r2, Imm i ->
+    Int32.of_int((((i land 4096) lsr 12) lsl 31) lor (((i land 0b11111100000) lsr 5) lsl 25) lor (r2 lsl 20) lor (r1 lsl 15) lor (func3 lsl 12) lor (((i land 0b11110) lsr 1) lsl 8) lor (((i land 2048) lsr 11) lsl 7) lor 0b1100011)
 
 let binary_of_lui regd imm =
   match regd, imm with
@@ -41,6 +46,12 @@ let binary_of_jal offset regd imm env =
   | Regname rd, Jmplabel l ->
     let imm = ((find_label_num l env) - offset)*4 in
     Int32.of_int((((imm land 1048576) lsr 20) lsl 31) lor (((imm land 0b11111111110) lsr 1) lsl 21) lor (((imm land 0b100000000000) lsr 11) lsl 20) lor (((imm land 1048575) lsr 12) lsl 12) lor (rd lsl 7) lor 0b1101111)
+
+let binary_of_jal_imm offset regd imm env =
+  match regd, imm with
+  | Regname rd, Imm i ->
+    Int32.of_int((((i land 1048576) lsr 20) lsl 31) lor (((i land 0b11111111110) lsr 1) lsl 21) lor (((i land 0b100000000000) lsr 11) lsl 20) lor (((i land 1048575) lsr 12) lsl 12) lor (rd lsl 7) lor 0b1101111)
+
 
 let binary_of_jalr regd reg1 imm =
   match reg1, regd, imm with
@@ -87,6 +98,25 @@ let binary_of_fbranch func7 func3 regd freg1 freg2 =
   | Regname rd, Fregname f1, Fregname f2 ->
     Int32.of_int((func7 lsl 25) lor (f2 lsl 20) lor (f1 lsl 15) lor (func3 lsl 12) lor (rd lsl 7) lor 0b1010011)
 
+let binary_of_fcvtws func7 func3 regd freg1 =
+  match regd, freg1 with
+  | Regname rd, Fregname f1 ->
+    Int32.of_int((func7 lsl 25) lor (f1 lsl 15) lor (func3 lsl 12) lor (rd lsl 7) lor 0b1010011)
+
+let binary_of_fcvtsw func7 func3 fregd reg1 =
+  match fregd, reg1 with
+  | Fregname fd, Regname r1 ->
+    Int32.of_int((func7 lsl 25) lor (r1 lsl 15) lor (func3 lsl 12) lor (fd lsl 7) lor 0b1010011)
+
+
+let binary_of_send regd =
+  match regd with
+  | Regname rd -> Int32.of_int((rd lsl 7) lor 0b0000010)
+
+let binary_of_recv regd =
+  match regd with
+  | Regname rd -> Int32.of_int((rd lsl 7) lor 0b0000001)
+
 let make_binary offset env e = match e with
   | Add (x, y, z) -> binary_of_op 0 0 x y z
   | Sub (x, y, z) -> binary_of_op 0b100000 0 x y z
@@ -109,9 +139,14 @@ let make_binary offset env e = match e with
   | Bne (x, y, z) -> binary_of_branch offset 1 x y z env
   | Blt (x, y, z) -> binary_of_branch offset 4 x y z env
   | Bge (x, y, z) -> binary_of_branch offset 5 x y z env
+  | Beqi (x, y, z) -> binary_of_branch_imm offset 0 x y z env
+  | Bnei (x, y, z) -> binary_of_branch_imm offset 1 x y z env
+  | Blti (x, y, z) -> binary_of_branch_imm offset 4 x y z env
+  | Bgei (x, y, z) -> binary_of_branch_imm offset 5 x y z env
   | Lui (x, y) -> binary_of_lui x y
   | Auipc (x, y) -> binary_of_auipc x y
   | Jal (x, y) -> binary_of_jal offset x y env
+  | Jali (x, y) -> binary_of_jal_imm offset x y env
   | Jalr (x, y, z) -> binary_of_jalr x y z
   | Lw (x, y, z) -> binary_of_lw x y z
   | Sw (x, y, z) -> binary_of_sw x y z
@@ -124,9 +159,15 @@ let make_binary offset env e = match e with
   | Fsubs (x, y, z) -> binary_of_fop 4 0 x y z
   | Fmuls (x, y, z) -> binary_of_fop 8 0 x y z
   | Fdivs (x, y, z) -> binary_of_fop 12 0 x y z
-  | Fsqrts (x, y) ->   binary_of_fop 0b101100 0 x y (Fregname(0))
+  | Fsqrts (x, y) ->   binary_of_fop 0b0101100 0 x y (Fregname(0))
+  | Fcvtws (x, y) ->   binary_of_fcvtws 0b1100000 0 x y
+  | Fcvtwsrdn (x, y) -> binary_of_fcvtws 0b1100000 2 x y
   | Fmvxw (x, y) -> binary_of_fmvxw x y
   | Feqs (x, y, z) -> binary_of_fbranch 0b1010000 2 x y z
   | Flts (x, y, z) -> binary_of_fbranch 0b1010000 1 x y z
   | Fles (x, y, z) -> binary_of_fbranch 0b1010000 0 x y z
+  | Fcvtsw (x, y) -> binary_of_fcvtsw 0b1101000 0 x y
+  | Fcvtswrdn (x, y) -> binary_of_fcvtsw 0b1101000 2 x y
   | Fmvwx (x, y) -> binary_of_fmvwx x y
+  | Send (x)     -> binary_of_send x
+  | Recv (x)     -> binary_of_recv x

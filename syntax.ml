@@ -33,10 +33,15 @@ type expr =
   | Bne of reg * reg * jmplabel
   | Blt of reg * reg * jmplabel
   | Bge of reg * reg * jmplabel
+  | Beqi of reg * reg * imm
+  | Bnei of reg * reg * imm
+  | Blti of reg * reg * imm
+  | Bgei of reg * reg * imm
   | Lui of reg * imm
   | Li of reg * imm
   | Auipc of reg * imm
   | Jal of reg * jmplabel
+  | Jali of reg * imm
   | Jalr of reg * reg * imm
   | Lw of reg * imm * reg
   | Sw of reg * imm * reg
@@ -50,11 +55,17 @@ type expr =
   | Fmuls of freg * freg * freg
   | Fdivs of freg * freg * freg
   | Fsqrts of freg * freg
+  | Fcvtws of reg * freg
+  | Fcvtwsrdn of reg * freg
   | Fmvxw of reg * freg
   | Feqs of reg * freg * freg
   | Flts of reg * freg * freg
   | Fles of reg * freg * freg
+  | Fcvtsw of freg * reg
+  | Fcvtswrdn of freg * reg
   | Fmvwx of freg * reg
+  | Send of reg
+  | Recv of reg
 
 type command =
   | Top of expr

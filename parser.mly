@@ -6,13 +6,14 @@
 %token ADD SUB SLL SLT XOR SRL SRA OR AND
 %token ADDI SLTI XORI ORI ANDI
 %token SLLI SRLI SRAI
-%token BEQ BNE BLT BGE
+%token BEQ BNE BLT BGE BEQI BNEI BLTI BGEI
 %token LUI LI AUIPC
-%token JAL JALR
+%token JAL JALI JALR
 %token LW SW
 %token MUL DIV REM
 %token FLW FSW
-%token FADDS FSUBS FMULS FDIVS FSQRTS FMVXW FEQS FLTS FLES FMVWX
+%token FADDS FSUBS FMULS FDIVS FSQRTS FCVTWS FCVTWSRDN FMVXW FEQS FLTS FLES FCVTSW FCVTSWRDN FMVWX
+%token SEND RECV
 %token LPAR RPAR
 %token <int> IMM
 %token <int> REG
@@ -50,10 +51,15 @@ expr:
   | BNE REG REG JMPLABEL          {Bne    (Regname($2),  Regname($3),  Jmplabel($4))}
   | BLT REG REG JMPLABEL          {Blt    (Regname($2),  Regname($3),  Jmplabel($4))}
   | BGE REG REG JMPLABEL          {Bge    (Regname($2),  Regname($3),  Jmplabel($4))}
+  | BEQI REG REG IMM              {Beqi   (Regname($2),  Regname($3), Imm($4))}
+  | BNEI REG REG IMM              {Bnei   (Regname($2),  Regname($3),  Imm($4))}
+  | BLTI REG REG IMM              {Blti   (Regname($2),  Regname($3),  Imm($4))}
+  | BGEI REG REG IMM              {Bgei   (Regname($2),  Regname($3),  Imm($4))}
   | LUI REG IMM                   {Lui    (Regname($2),  Imm($3))}
   | LI REG IMM                    {Li     (Regname($2),  Imm($3))}
   | AUIPC REG IMM                 {Auipc  (Regname($2),  Imm($3))}
   | JAL REG JMPLABEL              {Jal    (Regname($2),  Jmplabel($3))}
+  | JALI REG IMM                  {Jali   (Regname($2),  Imm($3))}
   | JALR REG REG IMM              {Jalr   (Regname($2),  Regname($3),  Imm($4))}
   | LW REG IMM LPAR REG RPAR      {Lw     (Regname($2),  Imm($3),  Regname($5))}
   | SW REG IMM LPAR REG RPAR      {Sw     (Regname($2),  Imm($3),  Regname($5))}
@@ -67,8 +73,14 @@ expr:
   | FMULS FREG FREG FREG          {Fmuls  (Fregname($2),  Fregname($3),  Fregname($4))}
   | FDIVS FREG FREG FREG          {Fdivs  (Fregname($2),  Fregname($3),  Fregname($4))}
   | FSQRTS FREG FREG              {Fsqrts (Fregname($2),  Fregname($3))}
+  | FCVTWS REG FREG               {Fcvtws (Regname($2),  Fregname($3))}
+  | FCVTWSRDN REG FREG            {Fcvtwsrdn (Regname($2),  Fregname($3))}
   | FMVXW REG FREG                {Fmvxw  (Regname($2),  Fregname($3))}
   | FEQS REG FREG FREG            {Feqs   (Regname($2),  Fregname($3),  Fregname($4))}
   | FLTS REG FREG FREG            {Flts   (Regname($2),  Fregname($3),  Fregname($4))}
   | FLES REG FREG FREG            {Fles   (Regname($2),  Fregname($3),  Fregname($4))}
+  | FCVTSW FREG REG               {Fcvtsw (Fregname($2),  Regname($3))}
+  | FCVTSWRDN FREG REG            {Fcvtswrdn (Fregname($2),  Regname($3))}
   | FMVWX FREG REG                {Fmvwx  (Fregname($2),  Regname($3))}
+  | SEND REG                      {Send   (Regname($2))}
+  | RECV REG                      {Recv   (Regname($2))}
