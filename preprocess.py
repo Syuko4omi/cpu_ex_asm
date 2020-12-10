@@ -9,10 +9,47 @@ li_num = 0
 section_num = 0 #0:text, 1:data
 JMP_Inst = ['beq', 'bne', 'blt', 'bge', 'jal']
 
+def parse(s):
+    L = []
+    buf = ''
+    for i in range(len(s)):
+        if s[i] == '\n':
+            L.append(buf)
+            buf = ''
+            break
+        else:
+            if re.match('\s', s[i]) or s[i] == ',':
+                if len(buf) != 0:
+                    L.append(buf)
+                    buf = ''
+            else:
+                buf += s[i]
+    if len(buf) != 0:
+        L.append(buf)
+    if len(L) != 0:
+        return L
+
 with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
     while True:
+        #命令のインデントずれなどを整形,解決すべきラベルを即値のリストに入れる
         s = fin.readline()
         if s:
+            print(s)
+            if s != '\n':
+                parts_of_inst = parse(s)
+                if parts_of_inst[0] == '.section':
+                    s = parts_of_inst[0]+'\t'+parts_of_inst[1]+'\n'
+                elif parts_of_inst[0] == '.4byte':
+                    s = '\t'+parts_of_inst[0]+'\t'+parts_of_inst[1]+'\n'
+                elif parts_of_inst[0][len(parts_of_inst[0])-1] == ':':
+                    s = parts_of_inst[0]+'\n'
+                else:
+                    s = '\t'+parts_of_inst[0]+'\t'
+                    for k in range(1, len(parts_of_inst)):
+                        if k != len(parts_of_inst)-1:
+                            s += parts_of_inst[k]+', '
+                        else:
+                            s += parts_of_inst[k]+'\n'
             Insts.append(s)
             len_s = len(s)
             if section_num == 0:
@@ -51,6 +88,7 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                     break
         else:
             break
+    #ジャンプ,分岐系の命令の所に即値が入っていた場合、liやla命令を2命令に分解することでズレが発生するのを修正
     for i in range(len(Insts)):
         if Insts[i][1:4] in JMP_Inst and Insts[i][1:5] != 'jalr':
             cnt = 0
@@ -112,6 +150,7 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                     Insts[i] = Insts[i][:len(Insts[i])-replace_pos]+str(imm)+'\n'
             else:
                 None
+    #li/la命令を分解,rdnオプションを付与,整形した命令を出力
     for i in range(len(Insts)):
         if Insts[i][1] == 'l' and (Insts[i][2] == 'i' or Insts[i][2] == 'a'):
             flag = False
