@@ -111,7 +111,7 @@ let binary_of_fcvtsw func7 func3 fregd reg1 =
 
 let binary_of_send regd =
   match regd with
-  | Regname rd -> Int32.of_int((rd lsl 7) lor 0b0000010)
+  | Regname rd -> Int32.of_int((rd lsl 15) lor 0b0000010)
 
 let binary_of_recv regd =
   match regd with
@@ -139,6 +139,8 @@ let make_binary offset env e = match e with
   | Bne (x, y, z) -> binary_of_branch offset 1 x y z env
   | Blt (x, y, z) -> binary_of_branch offset 4 x y z env
   | Bge (x, y, z) -> binary_of_branch offset 5 x y z env
+  | Bltu (x, y, z) -> binary_of_branch offset 6 x y z env
+  | Bgeu (x, y, z) -> binary_of_branch offset 7 x y z env
   | Beqi (x, y, z) -> binary_of_branch_imm offset 0 x y z env
   | Bnei (x, y, z) -> binary_of_branch_imm offset 1 x y z env
   | Blti (x, y, z) -> binary_of_branch_imm offset 4 x y z env
@@ -160,6 +162,8 @@ let make_binary offset env e = match e with
   | Fmuls (x, y, z) -> binary_of_fop 8 0 x y z
   | Fdivs (x, y, z) -> binary_of_fop 12 0 x y z
   | Fsqrts (x, y) ->   binary_of_fop 0b0101100 0 x y (Fregname(0))
+  | Fsgnjs (x, y, z) -> binary_of_fop 0b0010000 0 x y z
+  | Fsgnjns (x, y, z) -> binary_of_fop 0b0010000 1 x y z
   | Fcvtws (x, y) ->   binary_of_fcvtws 0b1100000 0 x y
   | Fcvtwsrdn (x, y) -> binary_of_fcvtws 0b1100000 2 x y
   | Fmvxw (x, y) -> binary_of_fmvxw x y
@@ -169,5 +173,9 @@ let make_binary offset env e = match e with
   | Fcvtsw (x, y) -> binary_of_fcvtsw 0b1101000 0 x y
   | Fcvtswrdn (x, y) -> binary_of_fcvtsw 0b1101000 2 x y
   | Fmvwx (x, y) -> binary_of_fmvwx x y
+  | Ble (x, y, z) -> binary_of_branch offset 5 y x z env
+  | Bgt (x, y, z) -> binary_of_branch offset 4 y x z env
+  | Bgtu (x, y, z) -> binary_of_branch offset 6 y x z env
+  | Fmvs (x, y) -> binary_of_fop 0b0010000 0 x y y
   | Send (x)     -> binary_of_send x
   | Recv (x)     -> binary_of_recv x

@@ -89,8 +89,9 @@ rule main = parse
 | "blt_i"               { BLTI }
 | "bge"                 { BGE }
 | "bge_i"               { BGEI }
+| "bltu"                { BLTU }
+| "bgeu"                { BGEU }
 | "lui"                 { LUI }
-| "li"                  { LI }
 | "auipc"               { AUIPC }
 | "jal"                 { JAL }
 | "jal_i"               { JALI }
@@ -118,6 +119,10 @@ rule main = parse
 | "fmv.w.x"             { FMVWX }
 | "send"                { SEND }
 | "recv"                { RECV }
+| "ble"                 { BLE }
+| "bgt"                 { BGT }
+| "bgtu"                { BGTU }
+| "fmv.s"               { FMVS }
 | "("                   { LPAR }
 | ")"                   { RPAR }
 | eof                   { raise End_of_file }
