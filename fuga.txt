@@ -1,0 +1,9 @@
+.section .text
+hoge:
+	addi	sp,sp,-80
+    sw	s0,76(sp)
+    la  a0,fuga
+.section	.data
+fuga:
+    .4byte 0x11111111
+    .4byte 0x22222222

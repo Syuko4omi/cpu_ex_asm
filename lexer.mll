@@ -4,6 +4,7 @@
 
 let natural_num = ['1'-'9'] ['0'-'9']* | '0'
 let digit = '-'? natural_num
+let hexa_decimal = '0' 'x' ['0'-'9' 'a'-'f']*
 let reg_num = ['1'-'2']? ['0'-'9'] | ['3'] ['0'-'1']
 let space = ' ' | '\t' | '\r'
 let text_ele = ['a'-'z' 'A'-'Z' '_' '0'-'9' '-' '.']
@@ -13,6 +14,7 @@ rule main = parse
 | '\n'                  { NEWLINE }
 | (text_ele+ as l) ':'  { LABEL l }
 | digit as d            { (IMM (int_of_string d)) }
+| hexa_decimal as h     { (IMM (int_of_string h)) }
 | "zero"                { (REG (0)) }
 | "ra"                  { (REG (1)) }
 | "sp"                  { (REG (2)) }
@@ -108,6 +110,8 @@ rule main = parse
 | "fmul.s"              { FMULS }
 | "fdiv.s"              { FDIVS }
 | "fsqrt.s"             { FSQRTS }
+| "fsgnj.s"             { FSGNJS }
+| "fsgnjn.s"            { FSGNJNS }
 | "fcvt.w.s"            { FCVTWS }
 | "fcvt.w.s.rdn"        { FCVTWSRDN }
 | "fmv.x.w"             { FMVXW }
@@ -123,6 +127,7 @@ rule main = parse
 | "bgt"                 { BGT }
 | "bgtu"                { BGTU }
 | "fmv.s"               { FMVS }
+| ".4byte"              { FOUR_BYTE_DATA }
 | "("                   { LPAR }
 | ")"                   { RPAR }
 | eof                   { raise End_of_file }

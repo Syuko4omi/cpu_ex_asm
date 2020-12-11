@@ -179,3 +179,5 @@ let make_binary offset env e = match e with
   | Fmvs (x, y) -> binary_of_fop 0b0010000 0 x y y
   | Send (x)     -> binary_of_send x
   | Recv (x)     -> binary_of_recv x
+  | Four_byte_data (x) -> (match x with
+                          | Imm y -> Int32.of_int(y))

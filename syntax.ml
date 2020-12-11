@@ -73,6 +73,7 @@ type expr =
   | Fmvs of freg * freg
   | Send of reg
   | Recv of reg
+  | Four_byte_data of imm
 
 type command =
   | Top of expr

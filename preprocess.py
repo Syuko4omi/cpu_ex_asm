@@ -4,6 +4,9 @@ import re
 Label = []
 Insts = []
 Li_Imm = []
+Data_ram = []
+current_list = []
+list_num = -1
 cur = 0
 li_num = 0
 section_num = 0 #0:text, 1:data
@@ -50,6 +53,8 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                             s += parts_of_inst[k]+', '
                         else:
                             s += parts_of_inst[k]+'\n'
+            else:
+                continue
             Insts.append(s)
             len_s = len(s)
             if section_num == 0:
@@ -75,19 +80,26 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                     else:
                         cur += 1
                 else:
-                    break
+                    None
             else:
                 if s != '\n':
                     if s[len_s-2] == ':':
-                        t = fin.readline()
-                        Insts.append(t)
-                        if (t[0:8] == '\t.4byte\t'):
-                            imm = int(t[8:], 16)
-                            Label.append([s[0:len_s-2], imm])
+                        list_num += 1
+                        current_list = []
+                        Data_ram.append(current_list)
+                        Label.append([s[0:len_s-2], cur*4])
+                    elif s[0:8] == '\t.4byte\t':
+                        imm = int(s[8:], 16)
+                        Data_ram[list_num].append(imm)
+                        cur += 1
                 else:
-                    break
+                    None
         else:
             break
+    #print(Label)
+    #print(Insts)
+    #print(Li_Imm)
+    #print(Data_ram)
     #ジャンプ,分岐系の命令の所に即値が入っていた場合、liやla命令を2命令に分解することでズレが発生するのを修正
     for i in range(len(Insts)):
         if Insts[i][1:4] in JMP_Inst and Insts[i][1:5] != 'jalr':
@@ -218,6 +230,6 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                 else:
                     fout.write(Insts[i])
             elif Insts[i] == '.section\t.data\n':
-                break
+                None
             else:
                 fout.write(Insts[i])

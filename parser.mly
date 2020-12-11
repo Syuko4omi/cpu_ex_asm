@@ -16,6 +16,7 @@
 %token BLE BGT BGTU FMVS
 %token SEND RECV
 %token LPAR RPAR
+%token FOUR_BYTE_DATA
 %token <int> IMM
 %token <int> REG
 %token <int> FREG
@@ -40,6 +41,7 @@ expr:
   | SRL REG REG REG               {Srl    (Regname($2),  Regname($3),  Regname($4))}
   | SRA REG REG REG               {Sra    (Regname($2),  Regname($3),  Regname($4))}
   | OR REG REG REG                {Or     (Regname($2),  Regname($3),  Regname($4))}
+  | AND REG REG REG               {And     (Regname($2),  Regname($3),  Regname($4))}
   | ADDI REG REG IMM              {Addi   (Regname($2),  Regname($3),  Imm($4))}
   | SLTI REG REG IMM              {Slti   (Regname($2),  Regname($3),  Imm($4))}
   | XORI REG REG IMM              {Xori   (Regname($2),  Regname($3),  Imm($4))}
@@ -92,3 +94,4 @@ expr:
   | BGT REG REG JMPLABEL          {Bgt   (Regname($2),  Regname($3),  Jmplabel($4))}
   | BGTU REG REG JMPLABEL         {Bgtu   (Regname($2),  Regname($3),  Jmplabel($4))}
   | FMVS FREG FREG                {Fmvs  (Fregname($2),  Fregname($3))}
+  | FOUR_BYTE_DATA IMM            {Four_byte_data (Imm($2))}
