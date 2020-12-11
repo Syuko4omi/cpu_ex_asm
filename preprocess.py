@@ -37,7 +37,7 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
         #命令のインデントずれなどを整形,解決すべきラベルを即値のリストに入れる
         s = fin.readline()
         if s:
-            print(s)
+            #print(s)
             if s != '\n':
                 parts_of_inst = parse(s)
                 if parts_of_inst[0] == '.section':
