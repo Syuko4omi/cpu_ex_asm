@@ -46,7 +46,7 @@ fblt_else.31:
 	fsub.s	fa0, ft10, fa0
 	jalr	zero, ra, 0
 xor.11:
-	be	a1, a0, bne_else.32
+	beq	a1, a0, bne_else.32
 	li	a0, 1
 	jalr	zero, ra, 0
 bne_else.32:
