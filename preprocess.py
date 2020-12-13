@@ -28,6 +28,13 @@ def parse(s):   #命令をオペコードとオペランド単位に分解
         L.append(buf)
     return L
 
+def nearest_multpules_of_4096(x):
+    h = x//4096
+    cand_list = [(h-1)*4096, h*4096, (h+1)*4096]
+    L = [[abs(cand_list[0]-x),0], [abs(cand_list[1]-x),1], [abs(cand_list[2]-x),2]]
+    L.sort()
+    return cand_list[L[0][1]]
+
 with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
     while True:
         #stage 1:命令のインデントずれなどを整形, 解決すべきラベルを即値のリストに入れる
@@ -150,8 +157,6 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
             flag = False
             temp = 0
             rd = ''
-            top_20 = 0
-            under_12 = 0
             for j in range(len(Label)):
                 if Label[j][0] == Li_Imm[li_num]:
                     flag = True
@@ -171,8 +176,9 @@ with open(sys.argv[1]) as fin,  open(sys.argv[2], "w") as fout:
                     else:
                         break
                 x = int(Li_Imm[li_num])
-            top_20 = x >> 12
-            under_12 = x & 0b111111111111
+            y = nearest_multpules_of_4096(x)
+            top_20 = y >> 12
+            under_12 = x-y #this must be in -2048 ~ 2047
             fout.write('\tlui\t'+rd+', '+str(top_20)+'\n')
             fout.write('\taddi\t'+rd+', '+rd+', '+str(under_12)+'\n')
             li_num += 1
