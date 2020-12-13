@@ -1,5 +1,7 @@
 open Syntax
 
+exception Immediate_out_of_range
+
 let rec find_label_num l env =
   match env with
   | (x, id) :: rest -> if x = l then id else (find_label_num l rest)
@@ -13,7 +15,10 @@ let binary_of_op func7 func3 regd reg1 reg2 =
 let binary_of_op_imm func3 regd reg1 imm =
   match reg1, regd, imm with
   | Regname r1, Regname rd, Imm imm ->
-    Int32.of_int ((imm lsl 20) lor (r1 lsl 15) lor (func3 lsl 12) lor (rd lsl 7) lor 0b0010011)
+    if (-2048 <= imm) && (imm <= 2047) then
+      Int32.of_int ((imm lsl 20) lor (r1 lsl 15) lor (func3 lsl 12) lor (rd lsl 7) lor 0b0010011)
+    else
+      raise Immediate_out_of_range
 
 let binary_of_op_imm_shift func7 func3 regd reg1 imm =
   match reg1, regd, imm with
