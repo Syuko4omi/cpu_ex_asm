@@ -71,8 +71,8 @@ type expr =
   | Bgt of reg * reg * jmplabel
   | Bgtu of reg * reg * jmplabel
   | Fmvs of freg * freg
-  | Send of reg
-  | Recv of reg
+  | Sendb of reg
+  | Recvb of reg
   | Four_byte_data of imm
 
 type command =

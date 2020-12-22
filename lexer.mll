@@ -121,8 +121,8 @@ rule main = parse
 | "fcvt.s.w"            { FCVTSW }
 | "fcvt.s.w.rdn"        { FCVTSWRDN }
 | "fmv.w.x"             { FMVWX }
-| "send"                { SEND }
-| "recv"                { RECV }
+| "sendb"               { SEND_B }
+| "recvb"               { RECV_B }
 | "ble"                 { BLE }
 | "bgt"                 { BGT }
 | "bgtu"                { BGTU }

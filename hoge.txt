@@ -1,0 +1,14 @@
+recvb t0
+slli t0, t0, 8
+recvb t0
+slli t0, t0, 8
+recvb t0
+slli t0, t0, 8
+recvb t0
+sendb t0 
+srai t0, t0, 8
+sendb t0
+srai t0, t0, 8
+sendb t0
+srai t0, t0, 8
+sendb t0

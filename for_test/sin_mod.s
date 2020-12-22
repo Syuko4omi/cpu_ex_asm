@@ -1714,7 +1714,7 @@ min_caml_.L72:
 min_caml_.L73:
 	lui	a5, 2
 	addi	a5, a5, -552
-	addi	a4, a5, 59
+	addi	a4, a5, 0
 	lw	a5, -24(s0)
 	slli	a5, a5, 2
 	add	a5, a4, a5
@@ -1912,7 +1912,7 @@ min_caml_.L93:
 min_caml_.L94:
 	lui	a5, 2
 	addi	a5, a5, -552
-	addi	a4, a5, 59
+	addi	a4, a5, 0
 	lw	a5, -24(s0)
 	slli	a5, a5, 2
 	add	a5, a4, a5

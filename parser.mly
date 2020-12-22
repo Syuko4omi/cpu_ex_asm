@@ -15,7 +15,7 @@
 %token FADDS FSUBS FMULS FDIVS FSQRTS FSGNJS FSGNJNS FCVTWS FCVTWSRDN FMVXW
 %token FEQS FLTS FLES FCVTSW FCVTSWRDN FMVWX
 %token BLE BGT BGTU FMVS
-%token SEND RECV
+%token SEND_B RECV_B
 %token LPAR RPAR
 %token FOUR_BYTE_DATA
 %token <int> IMM
@@ -89,8 +89,8 @@ expr:
   | FCVTSW FREG REG               {Fcvtsw    (Fregname($2),  Regname($3))}
   | FCVTSWRDN FREG REG            {Fcvtswrdn (Fregname($2),  Regname($3))}
   | FMVWX FREG REG                {Fmvwx  (Fregname($2),  Regname($3))}
-  | SEND REG                      {Send   (Regname($2))}
-  | RECV REG                      {Recv   (Regname($2))}
+  | SEND_B REG                    {Sendb   (Regname($2))}
+  | RECV_B REG                    {Recvb   (Regname($2))}
   | BLE REG REG JMPLABEL          {Ble    (Regname($2),  Regname($3),  Jmplabel($4))}
   | BGT REG REG JMPLABEL          {Bgt    (Regname($2),  Regname($3),  Jmplabel($4))}
   | BGTU REG REG JMPLABEL         {Bgtu   (Regname($2),  Regname($3),  Jmplabel($4))}

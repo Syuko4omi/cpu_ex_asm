@@ -58,8 +58,8 @@
   55       | FCVTSW FREG REG
   56       | FCVTSWRDN FREG REG
   57       | FMVWX FREG REG
-  58       | SEND REG
-  59       | RECV REG
+  58       | SEND_B REG
+  59       | RECV_B REG
   60       | BLE REG REG JMPLABEL
   61       | BGT REG REG JMPLABEL
   62       | BGTU REG REG JMPLABEL
@@ -139,8 +139,8 @@ state 1
 	BGT  shift 59
 	BGTU  shift 60
 	FMVS  shift 61
-	SEND  shift 62
-	RECV  shift 63
+	SEND_B  shift 62
+	RECV_B  shift 63
 	FOUR_BYTE_DATA  shift 64
 	LABEL  shift 65
 	.  error
@@ -569,14 +569,14 @@ state 61
 
 
 state 62
-	expr : SEND . REG  (58)
+	expr : SEND_B . REG  (58)
 
 	REG  shift 127
 	.  error
 
 
 state 63
-	expr : RECV . REG  (59)
+	expr : RECV_B . REG  (59)
 
 	REG  shift 128
 	.  error
@@ -1023,13 +1023,13 @@ state 126
 
 
 state 127
-	expr : SEND REG .  (58)
+	expr : SEND_B REG .  (58)
 
 	.  reduce 58
 
 
 state 128
-	expr : RECV REG .  (59)
+	expr : RECV_B REG .  (59)
 
 	.  reduce 59
 

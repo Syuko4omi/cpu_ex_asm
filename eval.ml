@@ -114,11 +114,11 @@ let binary_of_fcvtsw func7 func3 fregd reg1 =
     Int32.of_int((func7 lsl 25) lor (r1 lsl 15) lor (func3 lsl 12) lor (fd lsl 7) lor 0b1010011)
 
 
-let binary_of_send regd =
+let binary_of_sendb regd =
   match regd with
   | Regname rd -> Int32.of_int((rd lsl 15) lor 0b0000010)
 
-let binary_of_recv regd =
+let binary_of_recvb regd =
   match regd with
   | Regname rd -> Int32.of_int((rd lsl 7) lor 0b0000001)
 
@@ -182,7 +182,7 @@ let make_binary offset env e = match e with
   | Bgt (x, y, z) ->    binary_of_branch offset 4 y x z env
   | Bgtu (x, y, z) ->   binary_of_branch offset 6 y x z env
   | Fmvs (x, y) ->    binary_of_fop 0b0010000 0 x y y
-  | Send (x)     ->   binary_of_send x
-  | Recv (x)     ->   binary_of_recv x
+  | Sendb (x)     ->   binary_of_sendb x
+  | Recvb (x)     ->   binary_of_recvb x
   | Four_byte_data (x) -> (match x with
                           | Imm y -> Int32.of_int(y))
